@@ -122,7 +122,7 @@ function handleCaseClick(caseId, caseData) {
           },
           2: {
             "data": "This chat will be added.",
-            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;",
+            "css": "background: white;width: fit-content;padding: 10px;border-radius: 9px 9px 9px 0px;bottom: 443px;position: absolute;right: 164px;",
 
           }
         }
@@ -207,22 +207,41 @@ function handleCaseClick(caseId, caseData) {
             if (step < Object.keys(demo_data["v1"]).length) {
               currentStep++;
 
-              const tourBackModal = document.getElementById("tourBackPane")
+              const tourBackModal = document.getElementById("tourBackPane");
+              const parent = tourBackModal.children[0]; // Get the first child of tourBackPane
+
+              if (parent && parent.children[0]) {
+                // Ensure the first child is an img element
+                console.log("sdfasdfasdf",parent.children[0])
+                // const cimg = parent.children[0]
+                if (parent.children[0].tagName === 'IMG') {
+                  parent.children[0].src = demo_data["v1"]["step" + currentStep]['back_pane_img']; // Update the src attribute
+                } else {
+                  console.error("The first child is not an img element.",parent);
+                }
+              } else {
+                console.error("Parent element or first child not found.");
+              }
+
+              // const tourBackModal = document.getElementById("tourBackPane")
               // tourBackModal.setAttribute("class","modal")
         
-              const myDiv = document.createElement("img")
-              // myDiv.src = "Asset/before.jpeg"
-              console.log("what eisdfsdsdfsdaf",demo_data["v1"]["step" + currentStep]['back_pane_img'])
-              myDiv.src = demo_data["v1"]["step" + currentStep]['back_pane_img']
+              // const myDiv = document.createElement("img")
+              // // myDiv.src = "Asset/before.jpeg"
+              // console.log("what eisdfsdsdfsdaf",demo_data["v1"]["step" + currentStep]['back_pane_img'])
+              // myDiv.src = demo_data["v1"]["step" + currentStep]['back_pane_img']
               // myDiv.textContent = 'here will ahve some images || image'
               // tourBackModal.children[0].firstChild().remvoe()
               
               renderStepContent(currentStep);
-              const parent = tourBackModal.children[0]
-              parent.replaceChild(myDiv,parent.firstChild)
+              // const parent = tourBackModal.children[0]
+              // console.log("parentsdfsda",parent)
+              // parent.replaceChild(myDiv,parent.firstChild)
+              
 
             } else {
               tourModal.style.display = 'none';  // Close modal after last step
+              console.log("arew ehere")
             }
           });
     
