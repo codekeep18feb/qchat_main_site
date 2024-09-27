@@ -15,7 +15,8 @@ const caseButtons = {
     benefits: ["v1Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing"],
     provides: ["Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing"],
     steps: ["Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing"],
-    examples: ["Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing"]
+    examples: ["Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing"],
+    
   },
   v2: {
     title: "CASE2 - Some other scenario with the chat",
@@ -102,98 +103,151 @@ function handleCaseClick(caseId, caseData) {
   // Add event listener for the watch demo button after content is added
   const watch_demo_btn = document.getElementById('watch_demo');
   if (watch_demo_btn) {
-  
+
     const demo_data = {
       "v1": {
         "step1": {
+          "back_pane_img": "Asset/before.jpeg",
           1: {
             "data": "Suppose this is your site",
-            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;"
+            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;",
           }
         },
         "step2": {
+          "back_pane_img": "Asset/after.jpeg",
           1: {
-            "data": "1st of step2 in v1",
-            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;"
+            "data": "this header will be added",
+            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;",
+
           },
           2: {
-            "data": "Suppose this is your site",
-            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;"
+            "data": "This chat will be added.",
+            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;",
+
           }
         }
       }
     };
-  
-    let currentStep = 1;
-  
-    // Function to render content based on step
-    function renderStepContent(step) {
-      const tourModal = document.getElementById('tourModal');
-      const tmc = document.querySelector('.tour-modal-content');
-      let content = '';
-      const data = demo_data["v1"]["step" + step];
-      
-      if (data) {
-        const no_of_itms = Object.keys(data).length;
-        for (let i = 1; i <= no_of_itms; i++) {
-          content += `
-            <div style="${data[i]['css']}">${data[i]['data']}</div>
-          `;
-        }
-        
-        // Add Next/Previous buttons based on the step
-        content += `<button id="previousStepBtn" ${step === 1 ? 'style="display:none;"' : ''}>Previous</button>`;
-        content += `<button id="nextStepBtn">${step === Object.keys(demo_data["v1"]).length ? 'Finish' : 'Next'}</button>`;
-        
-        // Clear old content and render new content
-        tmc.innerHTML = content;
-        
-        // Set up the Next and Previous button event handlers
-        document.getElementById('nextStepBtn').addEventListener('click', () => {
-          if (step < Object.keys(demo_data["v1"]).length) {
-            currentStep++;
-            renderStepContent(currentStep);
-          } else {
-            tourModal.style.display = 'none';  // Close modal after last step
-          }
-        });
-  
-        if (document.getElementById('previousStepBtn')) {
-          document.getElementById('previousStepBtn').addEventListener('click', () => {
-            if (step > 1) {
-              currentStep--;
-              renderStepContent(currentStep);
-            }
-          });
-        }
-      } else {
-        console.error("No content for this step!");
-      }
-    }
-  
-    // Modal handling
-    watch_demo_btn.addEventListener("click", (event) => {
-        tourModal.style.display = 'block'; // Show second modal
 
-        // Render the initial content for step 1
-        renderStepContent(currentStep);
+     // Modal handling
+     watch_demo_btn.addEventListener("click", (event) => {
+      console.log("can we see step here?",currentStep)
+      console.log("arew we here")
+      // let's add a backpane modal to hold items that we want to show demo buttons
+      const tourBackModal = document.getElementById("tourBackPane")
+      // tourBackModal.setAttribute("class","modal")
 
-        
-        // demoModal.style.display = "flex";
+      const myDiv = document.createElement("img")
+      myDiv.src = "Asset/before.jpeg"
+      console.log("what eisdfsdaf",demo_data["v1"]["step" + currentStep]['back_pane_img'])
+      myDiv.src = demo_data["v1"]["step" + currentStep]['back_pane_img']
+      // myDiv.textContent = 'here will ahve some images || image'
+
+      tourBackModal.children[0].appendChild(myDiv)
+
+      tourBackModal.style.display = 'block'; // Show second modal
+      tourBackModal.style.paddingTop = '5%'; // Show second modal
+      tourBackModal.style.paddingBottom = '5%'; // Show second modal
+      tourBackModal.style.height = '100%'; // Show second modal
+      tourBackModal.style.background = 'white%'; // Show second modal
+      // document.firstChild.appendChild(tourBackModal)
+
+      // Render the initial content for step 1
+      renderStepContent(currentStep);
+
+
+      // demoModal.style.display = "flex";
       // const takeTourBtn = document.getElementById('takeTourBtn');
-  
+
       // // Take the tour button opens the second modal
       // takeTourBtn.onclick = function () {
       //   // const demoModal = document.getElementById('demoModal');
       //   // const dmc = demoModal.children[0];
       //   // dmc.children[0].remove();
       //   // dmc.children[0].remove();
-  
-       
+
+
       // };
     });
+
+
+    let currentStep = 1;
+
+    // Function to render content based on step with error handling
+    function renderStepContent(step) {
+      try {
+        console.log("Rendering step:", step);
+        const tourModal = document.getElementById('tourModal');
+        tourModal.style.display = "block";
+        const tmc = document.querySelector('.tour-modal-content');
+        let content = '';
+        
+        // Try to access the step data in the demo_data object
+        const stepKey = "step" + step;
+        const data = demo_data["v1"][stepKey];
+    
+        if (data) {
+          delete data.back_pane_img;
+          for (let i in data) { // Using 'in' to loop over data
+            console.log(i,"whate irewsdfsd",data)
+            content += `
+              <div style="${data[i]['css']}">${data[i]['data']}</div>
+            `;
+          }
+    
+          // Add Next/Previous buttons based on the step
+          content += `<button id="previousStepBtn" style="color: red;position: absolute;bottom: 3%" ${step === 1 ? 'style="display:none;"' : ''}>Previous</button>`;
+          content += `<button id="nextStepBtn" style="color:red;color: red;position: absolute;bottom: 3%;right:0">${step === Object.keys(demo_data["v1"]).length ? 'Finish' : 'Next'}</button>`;
+    
+          // Clear old content and render new content
+          tmc.innerHTML = content;
+    
+          // Set up the Next and Previous button event handlers
+          document.getElementById('nextStepBtn').addEventListener('click', () => {
+            if (step < Object.keys(demo_data["v1"]).length) {
+              currentStep++;
+
+              const tourBackModal = document.getElementById("tourBackPane")
+              // tourBackModal.setAttribute("class","modal")
+        
+              const myDiv = document.createElement("img")
+              // myDiv.src = "Asset/before.jpeg"
+              console.log("what eisdfsdsdfsdaf",demo_data["v1"]["step" + currentStep]['back_pane_img'])
+              myDiv.src = demo_data["v1"]["step" + currentStep]['back_pane_img']
+              // myDiv.textContent = 'here will ahve some images || image'
+              // tourBackModal.children[0].firstChild().remvoe()
+              
+              renderStepContent(currentStep);
+              const parent = tourBackModal.children[0]
+              parent.replaceChild(myDiv,parent.firstChild)
+
+            } else {
+              tourModal.style.display = 'none';  // Close modal after last step
+            }
+          });
+    
+          if (document.getElementById('previousStepBtn')) {
+            document.getElementById('previousStepBtn').addEventListener('click', () => {
+              if (step > 1) {
+                currentStep--;
+                renderStepContent(currentStep);
+              }
+            });
+          }
+        } else {
+          console.error(`No content found for step: ${stepKey}`);
+        }
+    
+      } catch (error) {
+        // Log any error encountered along with the step that caused the issue
+        console.error(`Error while rendering content for step ${step}:`, error);
+      }
+    }
+    
+
+   
   }
-  
+
 
 }
 

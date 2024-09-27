@@ -798,7 +798,21 @@ body {
 .modal {
   display: none; /* Hidden by default */
   position: fixed;
-  z-index: 1000; /* Sit on top */
+  z-index: 10; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 1); /* Black background with opacity */
+  justify-content: center;
+  align-items: center;
+}
+
+
+.tour-modal{
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 20; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -807,6 +821,7 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 
 /* Modal Content */
 .modal-content {
@@ -821,7 +836,7 @@ body {
 }
 
 .tour-modal-content {
-  background-color: rgba(95, 92, 92, 0.8); /* Adjust the last value (0.8) for the level of transparency */
+  background-color: rgba(95, 92, 92, 0.1); /* Adjust the last value (0.8) for the level of transparency */
   padding: 20px;
   border-radius: 5px;
   width: 99%;
