@@ -57,18 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // // Modal handling
-  // document.addEventListener("click", (event) => {
-  //   if (event.target.textContent === "Watch Demo") {
-  //     const modal = document.getElementById("demoModal");
-  //     modal.style.display = "flex";
-  //   }
-  // });
 
-  document.querySelector(".close-btn").addEventListener("click", () => {
-    const modal = document.getElementById("demoModal");
-    modal.style.display = "none";
-  });
+
+  // document.querySelector(".close-btn").addEventListener("click", () => {
+  //   const modal = document.getElementById("demoModal");
+  //   modal.style.display = "none";
+  // });
 });
 
 // Handle toggling between sublist and chat wrapper
@@ -113,10 +107,6 @@ function handleCaseClick(caseId, caseData) {
       "v1": {
         "step1": {
           1: {
-            "data": "1st of v1",
-            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;"
-          },
-          2: {
             "data": "Suppose this is your site",
             "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;"
           }
@@ -183,21 +173,24 @@ function handleCaseClick(caseId, caseData) {
   
     // Modal handling
     watch_demo_btn.addEventListener("click", (event) => {
-      demoModal.style.display = "flex";
-      const takeTourBtn = document.getElementById('takeTourBtn');
-  
-      // Take the tour button opens the second modal
-      takeTourBtn.onclick = function () {
-        const demoModal = document.getElementById('demoModal');
-        const dmc = demoModal.children[0];
-        dmc.children[0].remove();
-        dmc.children[0].remove();
-  
         tourModal.style.display = 'block'; // Show second modal
-  
+
         // Render the initial content for step 1
         renderStepContent(currentStep);
-      };
+
+        
+        // demoModal.style.display = "flex";
+      // const takeTourBtn = document.getElementById('takeTourBtn');
+  
+      // // Take the tour button opens the second modal
+      // takeTourBtn.onclick = function () {
+      //   // const demoModal = document.getElementById('demoModal');
+      //   // const dmc = demoModal.children[0];
+      //   // dmc.children[0].remove();
+      //   // dmc.children[0].remove();
+  
+       
+      // };
     });
   }
   
@@ -279,7 +272,7 @@ const closeBtnTour = document.querySelector('.close-btn-tour');
 // Back to demo button closes the second modal and opens the first
 backToDemoBtn.onclick = function () {
   tourModal.style.display = 'none'; // Hide second modal
-  demoModal.style.display = 'block'; // Show first modal
+  // demoModal.style.display = 'block'; // Show first modal
 };
 
 // Close tour modal
@@ -289,9 +282,9 @@ closeBtnTour.onclick = function () {
 
 // Close modals if clicked outside content area
 window.onclick = function (event) {
-  if (event.target == demoModal) {
-    demoModal.style.display = 'none';
-  }
+  // if (event.target == demoModal) {
+  //   demoModal.style.display = 'none';
+  // }
   if (event.target == tourModal) {
     tourModal.style.display = 'none';
   }
