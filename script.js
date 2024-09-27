@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle case button clicks using a single handler
   ["v1", "v2", "v3"].forEach(caseId => {
     document.getElementById(caseId).addEventListener("click", () => {
-      handleCaseClick(caseButtons[caseId]);
+      handleCaseClick(caseId, caseButtons[caseId]);
     });
   });
 
@@ -56,13 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Modal handling
-  document.addEventListener("click", (event) => {
-    if (event.target.textContent === "Watch Demo") {
-      const modal = document.getElementById("demoModal");
-      modal.style.display = "flex";
-    }
-  });
+  // // Modal handling
+  // document.addEventListener("click", (event) => {
+  //   if (event.target.textContent === "Watch Demo") {
+  //     const modal = document.getElementById("demoModal");
+  //     modal.style.display = "flex";
+  //   }
+  // });
 
   document.querySelector(".close-btn").addEventListener("click", () => {
     const modal = document.getElementById("demoModal");
@@ -92,24 +92,36 @@ function handleBackButton() {
 }
 
 // Handle case button clicks
-function handleCaseClick(caseData) {
-  console.log("is this handler being called!!!!!!!",caseData)
+function handleCaseClick(caseId, caseData) {
+  console.log(caseId, "is this handler being called!!!!!!!",caseData)
   const content = pToAdminCaseContent(
     caseData.title,
     caseData.benefits,
     caseData.provides,
     caseData.steps,
-    caseData.examples
+    caseData.examples,
+    caseId
   );
   peerToAdminCases(content);
+
+  // Add event listener for the watch demo button after content is added
+  const watch_demo_btn = document.getElementById('watch_demo');
+  if (watch_demo_btn) {
+    // Modal handling
+    watch_demo_btn.addEventListener("click", (event) => {
+      console.log("can we access this",caseId)
+      demoModal.style.display = "flex";
+    });
+  }
+
 }
 
 // Generate HTML content for the selected case
-function pToAdminCaseContent(title, benefits, provides, steps, examples) {
+function pToAdminCaseContent(title, benefits, provides, steps, examples,caseId) {
   console.log("in the case of v3 what is provides",provides)
   return `
     <section class="v1_wrapper">
-      <h4>${title}</h4>
+      <h4>${caseId} - ${title}</h4>
       <div class="v1_contants">
         <div class="v1_contant_cards">
           <h5>Benefits</h5>
@@ -125,7 +137,7 @@ function pToAdminCaseContent(title, benefits, provides, steps, examples) {
           </ul>
           <button class="read_more_btn">Read more</button>
         </div>
-        <button>Watch Demo</button>
+        <button id="watch_demo">Watch Demo</button>
         <div class="v1_contant_cards">
           <h5>Steps</h5>
           <ul>${steps.map(item => `<li>${item}</li>`).join('')}
@@ -144,6 +156,17 @@ function pToAdminCaseContent(title, benefits, provides, steps, examples) {
     </section>
   `;
 }
+
+
+const watch_demo_btn = document.getElementById('watch_demo');
+  
+
+
+  // Modal handling
+  watch_demo_btn.addEventListener("click", (event) => {
+
+    demoModal.style.display = "flex";
+  });
 
 // Update content and handle display logic for the case
 function peerToAdminCases(content) {

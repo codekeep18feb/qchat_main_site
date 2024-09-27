@@ -1,6 +1,7 @@
   // Get modal elements
   const demoModal = document.getElementById('demoModal');
   const tourModal = document.getElementById('tourModal');
+  
 
   // Get buttons
   const takeTourBtn = document.getElementById('takeTourBtn');
@@ -47,7 +48,7 @@
 
     // Append the HTML content at the end of the tmc element
     tmc.insertAdjacentHTML('beforeend', content);
-    
+
 
 
   };
