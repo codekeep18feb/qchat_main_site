@@ -16,7 +16,7 @@ const caseButtons = {
     provides: ["Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing"],
     steps: ["Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing"],
     examples: ["Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing", "Lorem Ipsum is simply dummy text of the printing"],
-    
+
   },
   v2: {
     title: "CASE2 - Some other scenario with the chat",
@@ -60,10 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  // document.querySelector(".close-btn").addEventListener("click", () => {
-  //   const modal = document.getElementById("demoModal");
-  //   modal.style.display = "none";
-  // });
+  
 });
 
 // Handle toggling between sublist and chat wrapper
@@ -100,172 +97,89 @@ function handleCaseClick(caseId, caseData) {
   );
   peerToAdminCases(content);
 
-  // Add event listener for the watch demo button after content is added
+
   const watch_demo_btn = document.getElementById('watch_demo');
-  if (watch_demo_btn) {
 
-    const demo_data = {
-      "v1": {
-        "step1": {
-          "back_pane_img": "Asset/before.jpeg",
-          1: {
-            "data": "Suppose this is your site",
-            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;",
-          }
-        },
-        "step2": {
-          "back_pane_img": "Asset/after.jpeg",
-          1: {
-            "data": "this header will be added",
-            "css": "background: white;width: fit-content; padding: 10px; border-radius: 9px 9px 9px 0px;",
+// Define demo data with desktop and mobile images
+const demo_data = {
+  "v1": {
+    "step1": { 
+      "back_pane_img_mobile": "Asset/demo_imgs/before_mobile.jpg",
+      "back_pane_img_desktop": "Asset/demo_imgs/before.jpeg"
+    },
+    "step2": { 
+      "back_pane_img_mobile": "Asset/demo_imgs/mobile_after.png",
+      "back_pane_img_desktop": "Asset/demo_imgs/after.jpeg"
+    }
+  }
+};
 
-          },
-          2: {
-            "data": "This chat will be added.",
-            "css": "background: white;width: fit-content;padding: 10px;border-radius: 9px 9px 9px 0px;bottom: 443px;position: absolute;right: 164px;",
+let currentStep = 1;
 
-          }
-        }
+if (watch_demo_btn) {
+  watch_demo_btn.addEventListener("click", () => {
+    renderStepContent(currentStep);
+  });
+}
+
+// Determine whether the device is mobile or desktop based on viewport width
+function isMobileView() {
+  return window.innerWidth < 768; // Consider mobile if viewport is less than 768px
+}
+
+// Render content based on the current step and device type (mobile/desktop)
+function renderStepContent(step) {
+  const tourModal = document.getElementById('tourModal');
+  const demoImageWrapper = document.querySelector('.demo-image-wrapper');
+
+  const stepKey = "step" + step;
+  const data = demo_data["v1"][stepKey];
+
+  if (data) {
+    // Show modal and update image based on step and viewport
+    tourModal.style.display = "block";
+    
+    const imageSrc = isMobileView() ? data.back_pane_img_mobile : data.back_pane_img_desktop;
+    demoImageWrapper.innerHTML = `<img src="${imageSrc}" alt="Step ${step} Image">`;
+
+    // Add Next/Previous buttons with Bootstrap Icons
+    demoImageWrapper.innerHTML += `
+      <div class="step-navigation">
+        <button id="previousStepBtn" class="btn btn-prev" ${step === 1 ? 'disabled' : ''}>
+          <i class="bi bi-arrow-left-circle"></i> Previous
+        </button>
+        <button id="nextStepBtn" class="btn btn-next">
+          ${step === Object.keys(demo_data["v1"]).length ? 'Finish' : 'Next'} 
+          <i class="bi bi-arrow-right-circle"></i>
+        </button>
+      </div>
+    `;
+
+    // Event listeners for next and previous buttons
+    document.getElementById('nextStepBtn').addEventListener('click', () => {
+      if (step < Object.keys(demo_data["v1"]).length) {
+        currentStep++;
+        renderStepContent(currentStep);
+      } else {
+        tourModal.style.display = 'none';  // Close modal after last step
       }
-    };
-
-     // Modal handling
-     watch_demo_btn.addEventListener("click", (event) => {
-      console.log("can we see step here?",currentStep)
-      console.log("arew we here")
-      // let's add a backpane modal to hold items that we want to show demo buttons
-      const tourBackModal = document.getElementById("tourBackPane")
-      // tourBackModal.setAttribute("class","modal")
-
-      const myDiv = document.createElement("img")
-      myDiv.src = "Asset/before.jpeg"
-      console.log("what eisdfsdaf",demo_data["v1"]["step" + currentStep]['back_pane_img'])
-      myDiv.src = demo_data["v1"]["step" + currentStep]['back_pane_img']
-      // myDiv.textContent = 'here will ahve some images || image'
-
-      tourBackModal.children[0].appendChild(myDiv)
-
-      tourBackModal.style.display = 'block'; // Show second modal
-      tourBackModal.style.paddingTop = '5%'; // Show second modal
-      tourBackModal.style.paddingBottom = '5%'; // Show second modal
-      tourBackModal.style.height = '100%'; // Show second modal
-      tourBackModal.style.background = 'white%'; // Show second modal
-      // document.firstChild.appendChild(tourBackModal)
-
-      // Render the initial content for step 1
-      renderStepContent(currentStep);
-
-
-      // demoModal.style.display = "flex";
-      // const takeTourBtn = document.getElementById('takeTourBtn');
-
-      // // Take the tour button opens the second modal
-      // takeTourBtn.onclick = function () {
-      //   // const demoModal = document.getElementById('demoModal');
-      //   // const dmc = demoModal.children[0];
-      //   // dmc.children[0].remove();
-      //   // dmc.children[0].remove();
-
-
-      // };
     });
 
-
-    let currentStep = 1;
-
-    // Function to render content based on step with error handling
-    function renderStepContent(step) {
-      try {
-        console.log("Rendering step:", step);
-        const tourModal = document.getElementById('tourModal');
-        tourModal.style.display = "block";
-        const tmc = document.querySelector('.tour-modal-content');
-        let content = '';
-        
-        // Try to access the step data in the demo_data object
-        const stepKey = "step" + step;
-        const data = demo_data["v1"][stepKey];
-    
-        if (data) {
-          delete data.back_pane_img;
-          for (let i in data) { // Using 'in' to loop over data
-            console.log(i,"whate irewsdfsd",data)
-            content += `
-              <div style="${data[i]['css']}">${data[i]['data']}</div>
-            `;
-          }
-    
-          // Add Next/Previous buttons based on the step
-          content += `<button id="previousStepBtn" style="color: red;position: absolute;bottom: 3%" ${step === 1 ? 'style="display:none;"' : ''}>Previous</button>`;
-          content += `<button id="nextStepBtn" style="color:red;color: red;position: absolute;bottom: 3%;right:0">${step === Object.keys(demo_data["v1"]).length ? 'Finish' : 'Next'}</button>`;
-    
-          // Clear old content and render new content
-          tmc.innerHTML = content;
-    
-          // Set up the Next and Previous button event handlers
-          document.getElementById('nextStepBtn').addEventListener('click', () => {
-            if (step < Object.keys(demo_data["v1"]).length) {
-              currentStep++;
-
-              const tourBackModal = document.getElementById("tourBackPane");
-              const parent = tourBackModal.children[0]; // Get the first child of tourBackPane
-
-              if (parent && parent.children[0]) {
-                // Ensure the first child is an img element
-                console.log("sdfasdfasdf",parent.children[0])
-                // const cimg = parent.children[0]
-                if (parent.children[0].tagName === 'IMG') {
-                  parent.children[0].src = demo_data["v1"]["step" + currentStep]['back_pane_img']; // Update the src attribute
-                } else {
-                  console.error("The first child is not an img element.",parent);
-                }
-              } else {
-                console.error("Parent element or first child not found.");
-              }
-
-              // const tourBackModal = document.getElementById("tourBackPane")
-              // tourBackModal.setAttribute("class","modal")
-        
-              // const myDiv = document.createElement("img")
-              // // myDiv.src = "Asset/before.jpeg"
-              // console.log("what eisdfsdsdfsdaf",demo_data["v1"]["step" + currentStep]['back_pane_img'])
-              // myDiv.src = demo_data["v1"]["step" + currentStep]['back_pane_img']
-              // myDiv.textContent = 'here will ahve some images || image'
-              // tourBackModal.children[0].firstChild().remvoe()
-              
-              renderStepContent(currentStep);
-              // const parent = tourBackModal.children[0]
-              // console.log("parentsdfsda",parent)
-              // parent.replaceChild(myDiv,parent.firstChild)
-              
-
-            } else {
-              tourModal.style.display = 'none';  // Close modal after last step
-              console.log("arew ehere")
-            }
-          });
-    
-          if (document.getElementById('previousStepBtn')) {
-            document.getElementById('previousStepBtn').addEventListener('click', () => {
-              if (step > 1) {
-                currentStep--;
-                renderStepContent(currentStep);
-              }
-            });
-          }
-        } else {
-          console.error(`No content found for step: ${stepKey}`);
-        }
-    
-      } catch (error) {
-        // Log any error encountered along with the step that caused the issue
-        console.error(`Error while rendering content for step ${step}:`, error);
+    document.getElementById('previousStepBtn').addEventListener('click', () => {
+      if (step > 1) {
+        currentStep--;
+        renderStepContent(currentStep);
       }
-    }
-    
-
-   
+    });
+  } else {
+    console.error(`No content found for step: ${stepKey}`);
   }
+}
+
+
+
+  
+  
 
 
 }
