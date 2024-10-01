@@ -108,7 +108,8 @@ function handleCaseClick(caseId, caseData) {
   peerToAdminCases(content);
 
 
-  const watch_demo_btn = document.getElementById('watch_demo');
+  const watch_demo_btn = document.getElementById('watch_demo_btn');
+  console.log("watch_demo_btn",watch_demo_btn)
 
   // Define demo data with desktop and mobile images
   const demo_data = {
@@ -218,7 +219,7 @@ function pToAdminCaseContent(title, benefits, provides, steps, examples, caseId)
           </div>
           </div>
 
-          <div class="watch_demo_btn">
+          <div class="watch_demo_btn" id="watch_demo_btn">
           <button id="watch_demo">Watch Demo</button>
           </div>
         

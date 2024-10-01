@@ -466,6 +466,7 @@ body {
   align-items: center;
   justify-content: center;
   background-color: var(--primary-color);
+  cursor: pointer;
 }
 #watch_demo {
   outline: none;
@@ -805,6 +806,12 @@ body {
   }
   .v1_wrapper {
     width: 100%;
+  }
+  .v1_contant_cards{
+    height: auto;
+  }
+  .v1_contant_cards:hover .icon{
+    display: none;
   }
   .navbar {
     width: 100%;
