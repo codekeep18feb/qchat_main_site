@@ -1,5 +1,3 @@
-
-
 const peerAdmin = document.querySelector(".peer_list .toggle");
 const sublist = document.querySelector(".peer_list_sublist");
 const worldChat = document.querySelector(".world-chat");
@@ -8,6 +6,7 @@ const utilityOptions = document.querySelector(".utility-options");
 const backButton = document.querySelector(".back-btn button");
 const navLinks = document.getElementById("nav-links");
 const navbar = document.querySelector('.navbar');
+
 
 const caseButtons = {
   v1: {
@@ -34,11 +33,18 @@ const caseButtons = {
   }
 };
 
+function toggleMenu() {
+  const navLinks = document.getElementById('nav-links');
+  navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
   peerAdmin.addEventListener("click", () => {
     toggleDisplayOnClick();
   });
+
+
 
   // Handle case button clicks using a single handler
   ["v1", "v2", "v3"].forEach(caseId => {
@@ -51,6 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
     handleBackButton();
   });
 
+
+
+
   // Toggle navbar on outside click
   document.addEventListener("click", (event) => {
     if (!navbar.contains(event.target) && !navLinks.contains(event.target) && navLinks.classList.contains("active")) {
@@ -60,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  
+
 });
 
 // Handle toggling between sublist and chat wrapper
@@ -100,86 +109,86 @@ function handleCaseClick(caseId, caseData) {
 
   const watch_demo_btn = document.getElementById('watch_demo');
 
-// Define demo data with desktop and mobile images
-const demo_data = {
-  "v1": {
-    "step1": { 
-      "back_pane_img_mobile": "Asset/demo_imgs/before_mobile.jpg",
-      "back_pane_img_desktop": "Asset/demo_imgs/before.jpeg"
-    },
-    "step2": { 
-      "back_pane_img_mobile": "Asset/demo_imgs/mobile_after.png",
-      "back_pane_img_desktop": "Asset/demo_imgs/after.jpeg"
+  // Define demo data with desktop and mobile images
+  const demo_data = {
+    "v1": {
+      "step1": {
+        "back_pane_img_mobile": "Asset/demo_imgs/before_mobile.jpg",
+        "back_pane_img_desktop": "Asset/demo_imgs/before.jpeg"
+      },
+      "step2": {
+        "back_pane_img_mobile": "Asset/demo_imgs/mobile_after.png",
+        "back_pane_img_desktop": "Asset/demo_imgs/after.jpeg"
+      }
+    }
+  };
+
+  let currentStep = 1;
+
+  if (watch_demo_btn) {
+    watch_demo_btn.addEventListener("click", () => {
+      renderStepContent(currentStep);
+    });
+  }
+
+  // Determine whether the device is mobile or desktop based on viewport width
+  function isMobileView() {
+    return window.innerWidth < 768; // Consider mobile if viewport is less than 768px
+  }
+
+  // Render content based on the current step and device type (mobile/desktop)
+  function renderStepContent(step) {
+    const tourModal = document.getElementById('tourModal');
+    const demoImageWrapper = document.querySelector('.demo-image-wrapper');
+
+    const stepKey = "step" + step;
+    const data = demo_data["v1"][stepKey];
+
+    if (data) {
+      // Show modal and update image based on step and viewport
+      tourModal.style.display = "block";
+
+      const imageSrc = isMobileView() ? data.back_pane_img_mobile : data.back_pane_img_desktop;
+      demoImageWrapper.innerHTML = `<img src="${imageSrc}" alt="Step ${step} Image">`;
+
+      // Add Next/Previous buttons with Bootstrap Icons
+      demoImageWrapper.innerHTML += `
+        <div class="step-navigation">
+          <button id="previousStepBtn" class="btn btn-prev" ${step === 1 ? 'disabled' : ''}>
+            <i class="bi bi-arrow-left-circle"></i> Previous
+          </button>
+          <button id="nextStepBtn" class="btn btn-next">
+            ${step === Object.keys(demo_data["v1"]).length ? 'Finish' : 'Next'} 
+            <i class="bi bi-arrow-right-circle"></i>
+          </button>
+        </div>
+      `;
+
+      // Event listeners for next and previous buttons
+      document.getElementById('nextStepBtn').addEventListener('click', () => {
+        if (step < Object.keys(demo_data["v1"]).length) {
+          currentStep++;
+          renderStepContent(currentStep);
+        } else {
+          tourModal.style.display = 'none';  // Close modal after last step
+        }
+      });
+
+      document.getElementById('previousStepBtn').addEventListener('click', () => {
+        if (step > 1) {
+          currentStep--;
+          renderStepContent(currentStep);
+        }
+      });
+    } else {
+      console.error(`No content found for step: ${stepKey}`);
     }
   }
-};
-
-let currentStep = 1;
-
-if (watch_demo_btn) {
-  watch_demo_btn.addEventListener("click", () => {
-    renderStepContent(currentStep);
-  });
-}
-
-// Determine whether the device is mobile or desktop based on viewport width
-function isMobileView() {
-  return window.innerWidth < 768; // Consider mobile if viewport is less than 768px
-}
-
-// Render content based on the current step and device type (mobile/desktop)
-function renderStepContent(step) {
-  const tourModal = document.getElementById('tourModal');
-  const demoImageWrapper = document.querySelector('.demo-image-wrapper');
-
-  const stepKey = "step" + step;
-  const data = demo_data["v1"][stepKey];
-
-  if (data) {
-    // Show modal and update image based on step and viewport
-    tourModal.style.display = "block";
-    
-    const imageSrc = isMobileView() ? data.back_pane_img_mobile : data.back_pane_img_desktop;
-    demoImageWrapper.innerHTML = `<img src="${imageSrc}" alt="Step ${step} Image">`;
-
-    // Add Next/Previous buttons with Bootstrap Icons
-    demoImageWrapper.innerHTML += `
-      <div class="step-navigation">
-        <button id="previousStepBtn" class="btn btn-prev" ${step === 1 ? 'disabled' : ''}>
-          <i class="bi bi-arrow-left-circle"></i> Previous
-        </button>
-        <button id="nextStepBtn" class="btn btn-next">
-          ${step === Object.keys(demo_data["v1"]).length ? 'Finish' : 'Next'} 
-          <i class="bi bi-arrow-right-circle"></i>
-        </button>
-      </div>
-    `;
-
-    // Event listeners for next and previous buttons
-    document.getElementById('nextStepBtn').addEventListener('click', () => {
-      if (step < Object.keys(demo_data["v1"]).length) {
-        currentStep++;
-        renderStepContent(currentStep);
-      } else {
-        tourModal.style.display = 'none';  // Close modal after last step
-      }
-    });
-
-    document.getElementById('previousStepBtn').addEventListener('click', () => {
-      if (step > 1) {
-        currentStep--;
-        renderStepContent(currentStep);
-      }
-    });
-  } else {
-    console.error(`No content found for step: ${stepKey}`);
-  }
-}
 
 
 
-  
-  
+
+
 
 
 }
@@ -188,41 +197,58 @@ function renderStepContent(step) {
 function pToAdminCaseContent(title, benefits, provides, steps, examples, caseId) {
   console.log("in the case of v3 what is provides", provides)
   return `
-    <section class="v1_wrapper">
-      <h4>${caseId} - ${title}</h4>
-      <div class="v1_contants">
-        <div class="v1_contant_cards">
-          <h5>Benefits</h5>
-          <ul>${benefits.map(item => `<li>${item}</li>`).join('')}
-            <img class="icon" src="Asset/arrow.png" alt="icon" />
-          </ul>
-          <button class="read_more_btn">Read more</button>
+      <section class="v1_wrapper">
+        <h4>${caseId} - ${title}</h4>
+        <div class="v1_contants">
+          <div class="row">
+          <div class="v1_contant_cards">
+            <h5>Benefits</h5>
+            <ul>${benefits.map(item => `<li>${item}</li>`).join('')}
+              <img class="icon" src="Asset/arrow.png" alt="icon" />
+            </ul>
+            <button class="read_more_btn">Read more</button>
+          </div>
+          <div class="v1_contant_cards">
+            <h5>Providessss</h5>
+            <ul>${provides.map(item => `<li>${item}</li>`).join('')}
+              <img class="icon" src="Asset/arrow.png" alt="icon" />
+            </ul>
+            <button class="read_more_btn">Read more</button>
+          </div>
+          </div>
+
+          <div class="watch_demo_btn">
+          <button id="watch_demo">Watch Demo</button>
+          </div>
+        
+
+          <div class="row">
+          <div class="v1_contant_cards">
+            <h5>Steps</h5>
+            <ul>${steps.map(item => `<li>${item}</li>`).join('')}
+              <img class="icon" src="Asset/arrow.png" alt="icon" />
+            </ul>
+            <button class="read_more_btn">Read more</button>
+          </div>
+          <div class="v1_contant_cards">
+            <h5>Examples</h5>
+            <ul>${examples.map(item => `<li>${item}</li>`).join('')}
+              <img class="icon" src="Asset/arrow.png" alt="icon" />
+            </ul>
+            <button class="read_more_btn">Read more</button>
+          </div>
+          </div>
+
+
+
+          
+
+
+                  
+        
         </div>
-        <div class="v1_contant_cards">
-          <h5>Providessss</h5>
-          <ul>${provides.map(item => `<li>${item}</li>`).join('')}
-            <img class="icon" src="Asset/arrow.png" alt="icon" />
-          </ul>
-          <button class="read_more_btn">Read more</button>
-        </div>
-        <button id="watch_demo">Watch Demo</button>
-        <div class="v1_contant_cards">
-          <h5>Steps</h5>
-          <ul>${steps.map(item => `<li>${item}</li>`).join('')}
-            <img class="icon" src="Asset/arrow.png" alt="icon" />
-          </ul>
-          <button class="read_more_btn">Read more</button>
-        </div>
-        <div class="v1_contant_cards">
-          <h5>Examples</h5>
-          <ul>${examples.map(item => `<li>${item}</li>`).join('')}
-            <img class="icon" src="Asset/arrow.png" alt="icon" />
-          </ul>
-          <button class="read_more_btn">Read more</button>
-        </div>
-      </div>
-    </section>
-  `;
+      </section>
+    `;
 }
 
 
