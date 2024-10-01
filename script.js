@@ -34,8 +34,8 @@ const caseButtons = {
 };
 
 function toggleMenu() {
-  const navLinks = document.getElementById('nav-links');
-  navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+  navLinks.classList.toggle('active'); // Toggle 'active' class
+  navLinks.style.display = navLinks.classList.contains('active') ? 'flex' : 'none'; // Use active class to control display
 }
 
 
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (event) => {
     if (!navbar.contains(event.target) && !navLinks.contains(event.target) && navLinks.classList.contains("active")) {
       navLinks.classList.remove("active");
+      navLinks.style.display = 'none';
     }
   });
 
